@@ -28,6 +28,7 @@ const ReminderManager = () => {
   const [isReady, setIsReady] = useState(false);
   const workerRef = useRef<Worker | null>(null);
   const registrationRef = useRef<ServiceWorkerRegistration | null>(null);
+  const testScheduledRef = useRef(false);
   const vapidKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
   const isClient = typeof window !== 'undefined';
 
@@ -158,6 +159,21 @@ const ReminderManager = () => {
       },
     });
   }, [cards, isHydrated]);
+
+  useEffect(() => {
+    if (!workerRef.current || !isReady) {
+      return;
+    }
+    if (permission !== 'granted') {
+      testScheduledRef.current = false;
+      return;
+    }
+    if (testScheduledRef.current) {
+      return;
+    }
+    workerRef.current.postMessage({ type: 'schedule-test' });
+    testScheduledRef.current = true;
+  }, [permission, isReady]);
 
   if (!isClient || !isReady || !('Notification' in window)) {
     return null;

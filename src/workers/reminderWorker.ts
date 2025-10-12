@@ -109,7 +109,17 @@ self.addEventListener('message', (event: MessageEvent) => {
   if (type === 'cancel' && typeof payload?.id === 'string') {
     clearTask(payload.id);
   }
+
+  if (type === 'schedule-test') {
+    const targetTime = new Date(Date.now() + 60_000).toISOString();
+    scheduleReminder({
+      id: 'flashcards-test-reminder',
+      groupId: '',
+      title: 'Test reminder',
+      body: 'Test push notification',
+      nextReviewAt: targetTime,
+    });
+  }
 });
 
 export {};
-
