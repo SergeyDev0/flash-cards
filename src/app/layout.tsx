@@ -12,6 +12,8 @@ const notoSans = Noto_Sans({
 export const metadata: Metadata = {
   title: "Памятные карточки",
   description: "Создавайте и просматривайте персонализированные карточки с напоминаниями, размещенными в определенном интервале.",
+  manifest: "/manifest.json",
+  themeColor: "#111111",
 };
 
 export default function RootLayout({
